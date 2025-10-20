@@ -1,6 +1,6 @@
 import '@/components/common/profile-card.ts'
 import { pushRouter } from '@/router.js'
-import { projects } from '@/states/projects'
+import { projects, trackedProject } from '@/states/projects'
 import {
   levelUpProgress,
   userBrightId,
@@ -85,6 +85,7 @@ export class HomeElement extends SignalWatcher(LitElement) {
   }
 
   protected render() {
+    const trackP = trackedProject.get()
     return html` <div class="body">
       <div class="profile-card-wrapper">
         <profile-card
@@ -112,7 +113,7 @@ export class HomeElement extends SignalWatcher(LitElement) {
               <verification-card-skeleton></verification-card-skeleton>
               <verification-card-skeleton></verification-card-skeleton>
             `
-          : map(projects.get(), (project) => {
+          : map(trackP ? [trackP] : projects.get(), (project) => {
               const totalSteps = levelUpProgress
                 .get()
                 .filter((item) => item.level <= project.requirementLevel)
@@ -124,8 +125,8 @@ export class HomeElement extends SignalWatcher(LitElement) {
                   .status=${stepsCompleted === 0
                     ? 'Not Started'
                     : stepsCompleted < totalSteps.length
-                    ? 'In progress'
-                    : 'Completed'}
+                      ? 'In progress'
+                      : 'Completed'}
                   .name=${project.name}
                   .levelRequirement=${project.requirementLevel}
                   .stepsCompleted="${stepsCompleted}"

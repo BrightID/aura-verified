@@ -3,6 +3,12 @@ import type { Project } from '@/types/projects'
 import { signal } from '@lit-labs/signals'
 
 export const projects = signal<Project[]>([])
+export const trackedProject = localStorageSignal<Project | null>(
+  'trackedProject',
+  null as Project | null,
+  (value) => (value ? (JSON.parse(value) as Project) : null),
+  (value) => (value ? JSON.stringify(value) : '')
+)
 
 export const enrolledProjects = localStorageSignal(
   'enrolledProjects',
