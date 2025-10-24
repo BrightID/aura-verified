@@ -57,6 +57,13 @@
       "when": 1755501337593,
       "tag": "0007_legal_overlord",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1761315456316,
+      "tag": "0008_thin_nocturne",
+      "breakpoints": true
     }
   ]
 }
