@@ -234,6 +234,9 @@ export class LoginPage extends SignalWatcher(LitElement) {
       max-width: 28rem;
       margin-left: auto;
       margin-right: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .logo {
@@ -284,13 +287,13 @@ export class LoginPage extends SignalWatcher(LitElement) {
     }
 
     .form-container {
-      margin: 2rem 0 1rem;
+      margin: 2rem 0;
       position: relative;
       border-radius: 1rem;
       border: 1px solid #4b5563;
       background: rgba(255, 255, 255, 0.08);
-      width: 100%;
-      max-width: 24rem;
+      width: 24rem;
+      max-width: 75vw;
       padding: 1.5rem;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
