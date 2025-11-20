@@ -753,7 +753,7 @@ export class LoginPage extends SignalWatcher(LitElement) {
       security: 2,
       description: 'Sign in with your Google account',
       color: 'bg-red-50 text-red-700 border-red-200',
-      callback: this.signInWithGoogle
+      callback: this.signInWithGoogle.bind(this)
     },
     {
       id: 'apple',
@@ -763,7 +763,7 @@ export class LoginPage extends SignalWatcher(LitElement) {
       security: 3,
       description: 'Sign in with Apple ID',
       color: 'bg-gray-50 text-gray-700 border-gray-200',
-      callback: this.signInWithApple
+      callback: this.signInWithApple.bind(this)
     },
     {
       id: 'ethereum',
