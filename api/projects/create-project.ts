@@ -2,6 +2,7 @@ import { VercelRequest, VercelResponse } from '@vercel/node'
 import { initializeApp } from 'firebase-admin/app'
 import { getAuth } from 'firebase-admin/auth'
 import z from 'zod'
+import withCors from '../lib/cors'
 import { db } from '../lib/db'
 import { projectsTable } from '../lib/schema'
 
@@ -22,7 +23,7 @@ const createProjectSchema = z.object({
   deadline: z.coerce.date().optional()
 })
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') return res.status(405).end()
 
   const token = req.headers.authorization?.split('Bearer ')[1]
@@ -43,3 +44,5 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     res.status(400).json({ error: (error as Error).message || 'Invalid request' })
   }
 }
+
+export default withCors(handler)

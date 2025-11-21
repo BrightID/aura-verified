@@ -1,14 +1,17 @@
+import { VercelRequest, VercelResponse } from '@vercel/node'
 import { eq } from 'drizzle-orm'
 import { initializeApp } from 'firebase-admin/app'
 import { getAuth } from 'firebase-admin/auth'
+import withCors from '../lib/cors'
 import { db } from '../lib/db'
 import { projectsTable } from '../lib/schema'
 
 initializeApp()
 
-export async function GET(req: Request) {
-  const token = req.headers.get('authorization')?.split('Bearer ')[1]
-  if (!token) return Response.json({ error: 'Unauthorized' }, { status: 401 })
+async function handler(req: VercelRequest, res: VercelResponse) {
+  const token = req.headers['authorization']?.split('Bearer ')[1]
+
+  if (!token) return res.status(401).json({ error: 'Unauthorized' })
 
   try {
     const { uid } = await getAuth().verifyIdToken(token)
@@ -32,8 +35,11 @@ export async function GET(req: Request) {
       .where(eq(projectsTable.creatorId, uid))
       .orderBy(projectsTable.createdAt)
 
-    return Response.json({ projects })
+    return res.send({ projects })
   } catch (error) {
-    return Response.json({ error: 'Invalid token' }, { status: 401 })
+    console.log(error)
+    return res.status(401).send({ error: 'Invalid token' })
   }
 }
+
+export default withCors(handler)

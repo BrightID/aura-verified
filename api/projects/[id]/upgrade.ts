@@ -5,7 +5,9 @@ import { z } from 'zod'
 import { db } from '../../lib/db'
 import { projectsTable, verificationPlansTable } from '../../lib/schema'
 
-initializeApp()
+if (!initializeApp.length) {
+  initializeApp()
+}
 
 const upgradeSchema = z.object({
   planId: z.number().int()

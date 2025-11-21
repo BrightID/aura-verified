@@ -1,26 +1,25 @@
+import { VercelRequest, VercelResponse } from '@vercel/node'
 import { and, eq, sql } from 'drizzle-orm'
 import { getAuth } from 'firebase-admin/auth'
+import withCors from '../../lib/cors'
 import { db } from '../../lib/db'
 import { projectsTable, verificationsTable } from '../../lib/schema'
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
-  const token = req.headers.get('authorization')?.split('Bearer ')[1]
+async function handler(req: VercelRequest, res: VercelResponse) {
+  const token = req.headers['authorization']?.split('Bearer ')[1]
   if (!token) return Response.json({ error: 'Unauthorized' }, { status: 401 })
 
   try {
     const { uid } = await getAuth().verifyIdToken(token)
-    const projectId = Number(params.id)
+    const projectId = Number(req.query.id)
 
-    // Check ownership
     const [project] = await db
       .select({ creatorId: projectsTable.creatorId })
       .from(projectsTable)
       .where(eq(projectsTable.id, projectId))
 
-    if (!project || project.creatorId !== uid)
-      return Response.json({ error: 'Forbidden' }, { status: 403 })
+    if (!project || project.creatorId !== uid) return res.status(403).json({ error: 'Forbidden' })
 
-    // Daily verification count (last 90 days)
     const usage = await db
       .select({
         date: sql`DATE(${verificationsTable.verifiedAt})`.as('date'),
@@ -55,8 +54,10 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
       }
     })
 
-    return Response.json({ data: filledData })
+    return res.json({ data: filledData })
   } catch (error) {
-    return Response.json({ error: 'Invalid request' }, { status: 400 })
+    return res.status(400).json({ error: 'Invalid request' })
   }
 }
+
+export default withCors(handler)

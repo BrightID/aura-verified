@@ -5,7 +5,9 @@ import { z } from 'zod'
 import { db } from '../../lib/db'
 import { projectsTable } from '../../lib/schema'
 
-initializeApp()
+if (!initializeApp.length) {
+  initializeApp()
+}
 
 const updateSchema = z.object({
   name: z.string().min(1).max(255).optional(),
