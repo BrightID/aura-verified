@@ -64,6 +64,20 @@
       "when": 1761315456316,
       "tag": "0008_thin_nocturne",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1763708561464,
+      "tag": "0009_majestic_william_stryker",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1763711853651,
+      "tag": "0010_glossy_rick_jones",
+      "breakpoints": true
     }
   ]
 }

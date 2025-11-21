@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm'
-import { boolean, integer, pgTable, text, timestamp, varchar } from 'drizzle-orm/pg-core'
+import { boolean, integer, pgTable, serial, text, timestamp, varchar } from 'drizzle-orm/pg-core'
 
 export const usersTable = pgTable('users', {
   id: varchar({ length: 43 }).notNull().primaryKey(),
@@ -42,4 +42,17 @@ export const verificationPlansTable = pgTable('plans', {
   order: integer().default(0),
   createdAt: timestamp().defaultNow(),
   updatedAt: timestamp().default(sql`CURRENT_TIMESTAMP`)
+})
+
+export const verificationsTable = pgTable('verifications', {
+  id: serial().primaryKey(),
+  userId: varchar({ length: 43 }).notNull(),
+  projectId: integer()
+    .notNull()
+    .references(() => projectsTable.id, { onDelete: 'cascade' }),
+  client: varchar({ length: 100 }).notNull(),
+  signature: varchar({ length: 500 }).notNull().unique(),
+  auraScore: integer(),
+  auraLevel: integer(),
+  verifiedAt: timestamp().notNull().defaultNow()
 })

@@ -76,6 +76,7 @@
     "drizzle-orm": "^0.44.2",
     "ethereum-blockies-base64": "^1.0.2",
     "firebase": "^11.9.0",
+    "firebase-admin": "^13.6.0",
     "googleapis": "^155.0.1",
     "lit": "^3.3.0",
     "marked": "^16.1.1",
