@@ -6,7 +6,11 @@ import withCors from '../lib/cors'
 import { db } from '../lib/db'
 import { projectsTable } from '../lib/schema'
 
-initializeApp()
+try {
+  initializeApp()
+} catch (e) {
+  console.log(e)
+}
 
 async function handler(req: VercelRequest, res: VercelResponse) {
   const token = req.headers['authorization']?.split('Bearer ')[1]

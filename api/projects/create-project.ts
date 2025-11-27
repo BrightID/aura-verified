@@ -1,22 +1,20 @@
 import { VercelRequest, VercelResponse } from '@vercel/node'
 import { initializeApp } from 'firebase-admin/app'
 import { getAuth } from 'firebase-admin/auth'
-import z from 'zod'
+import z, { ZodError } from 'zod'
 import withCors from '../lib/cors'
 import { db } from '../lib/db'
 import { projectsTable } from '../lib/schema'
 
-if (!initializeApp.length) {
-  initializeApp()
-}
+initializeApp()
 
 const createProjectSchema = z.object({
   name: z.string().min(1).max(255),
   description: z.string().min(1).max(255),
-  requirementLevel: z.number().int().positive(),
-  image: z.url().optional(),
+  requirementLevel: z.number().int().positive().optional(),
+  image: z.url().optional().nullable(),
   landingMarkdown: z.string().optional(),
-  logoUrl: z.url().optional(),
+  logoUrl: z.url().optional().nullable(),
   isActive: z.boolean().optional().default(true),
   websiteUrl: z.url().optional(),
   brightIdAppId: z.string().max(500).optional(),
@@ -41,6 +39,12 @@ async function handler(req: VercelRequest, res: VercelResponse) {
 
     res.status(201).json({ success: true })
   } catch (error) {
+    if (error instanceof ZodError) {
+      return res.status(400).json(z.treeifyError(error))
+    }
+
+    console.log(error)
+
     res.status(400).json({ error: (error as Error).message || 'Invalid request' })
   }
 }

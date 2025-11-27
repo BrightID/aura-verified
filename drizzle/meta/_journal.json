@@ -78,6 +78,20 @@
       "when": 1763711853651,
       "tag": "0010_glossy_rick_jones",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1764274877299,
+      "tag": "0011_low_patch",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1764274966295,
+      "tag": "0012_optimal_pride",
+      "breakpoints": true
     }
   ]
 }
