@@ -1,5 +1,14 @@
 import { sql } from 'drizzle-orm'
-import { boolean, integer, pgTable, serial, text, timestamp, varchar } from 'drizzle-orm/pg-core'
+import {
+  boolean,
+  decimal,
+  integer,
+  pgTable,
+  serial,
+  text,
+  timestamp,
+  varchar
+} from 'drizzle-orm/pg-core'
 
 export const usersTable = pgTable('users', {
   id: varchar({ length: 43 }).notNull().primaryKey(),
@@ -36,7 +45,7 @@ export const verificationPlansTable = pgTable('plans', {
   name: varchar({ length: 255 }).notNull(),
   isActive: boolean().default(true),
   tokens: integer().default(100),
-  pricePerExcess: integer().default(1),
+  pricePerExcess: decimal().default('1'),
   features: text().array().default([]),
   description: text(),
   isRecommended: boolean(),
