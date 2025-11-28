@@ -37,11 +37,21 @@ export const verificationPlansTable = pgTable('plans', {
   isActive: boolean().default(true),
   tokens: integer().default(100),
   pricePerExcess: integer().default(1),
+  features: text().array().default([]),
   description: text(),
   isRecommended: boolean(),
+  popular: boolean(),
+  monthlyPrice: integer().default(0),
+  yearlyPrice: integer().default(0),
   order: integer().default(0),
   createdAt: timestamp().defaultNow(),
   updatedAt: timestamp().default(sql`CURRENT_TIMESTAMP`)
+})
+
+export const upgradeRequest = pgTable('upgrade_requests', {
+  projectId: integer().references(() => projectsTable.id, { onDelete: 'cascade' }),
+  createdAt: timestamp().defaultNow(),
+  planId: integer().references(() => verificationPlansTable.id, { onDelete: 'cascade' })
 })
 
 export const verificationsTable = pgTable('verifications', {
@@ -55,4 +65,24 @@ export const verificationsTable = pgTable('verifications', {
   auraScore: integer(),
   auraLevel: integer(),
   verifiedAt: timestamp().notNull().defaultNow()
+})
+
+export const brightIdAppsTable = pgTable('brightid_apps', {
+  key: text('key').primaryKey(), // Unique key
+  name: text('name').notNull(), // Friendly name
+  sponsoring: boolean('sponsoring').notNull().default(true),
+  testing: boolean('testing').notNull().default(false),
+  idsAsHex: boolean('ids_as_hex').notNull().default(false),
+  soulbound: boolean('soulbound').notNull().default(false),
+  soulboundMessage: text('soulbound_message'),
+  usingBlindSig: boolean('using_blind_sig').notNull().default(false),
+  verifications: text('verifications'), // \n-separated logic
+  verificationExpirationLength: integer('verification_expiration_length'), // ms
+  nodeUrl: text('node_url'),
+  context: text('context'), // Required if soulbound
+  description: text('description'),
+  links: text('links'), // JSON string recommended
+  images: text('images'), // JSON string recommended
+  callbackUrl: text('callback_url'),
+  joined: timestamp('joined').notNull().defaultNow()
 })

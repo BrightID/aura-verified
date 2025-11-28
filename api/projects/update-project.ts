@@ -1,18 +1,23 @@
+import { VercelRequest, VercelResponse } from '@vercel/node'
 import { eq } from 'drizzle-orm'
 import { initializeApp } from 'firebase-admin/app'
 import { getAuth } from 'firebase-admin/auth'
-import { z } from 'zod'
-import { db } from '../../lib/db'
-import { projectsTable } from '../../lib/schema'
+import { z, ZodError } from 'zod'
+import withCors from '../lib/cors'
+import { db } from '../lib/db'
+import { projectsTable } from '../lib/schema'
 
-if (!initializeApp.length) {
+try {
   initializeApp()
+} catch (err) {
+  console.log(err)
 }
 
 const updateSchema = z.object({
+  id: z.number(),
   name: z.string().min(1).max(255).optional(),
   description: z.string().min(1).max(255).optional(),
-  requirementLevel: z.number().int().positive().optional(),
+  requirementLevel: z.number().int().positive().optional().nullable(),
   image: z.url().optional().nullable(),
   landingMarkdown: z.string().optional().nullable(),
   logoUrl: z.url().optional().nullable(),
@@ -23,30 +28,39 @@ const updateSchema = z.object({
   deadline: z.coerce.date().optional().nullable()
 })
 
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
-  const token = req.headers.get('authorization')?.split('Bearer ')[1]
+async function handler(req: VercelRequest, res: VercelResponse) {
+  if (req.method !== 'PATCH' && req.method !== 'POST') {
+    res.status(405).end()
+    return
+  }
+  const token = req.headers['authorization']?.split('Bearer ')[1]
   if (!token) return Response.json({ error: 'Unauthorized' }, { status: 401 })
-
   try {
     const { uid } = await getAuth().verifyIdToken(token)
-    const body = updateSchema.parse(await req.json())
+    const { id, ...body } = updateSchema.parse(req.body)
 
     const project = await db
       .select({ creatorId: projectsTable.creatorId })
       .from(projectsTable)
-      .where(eq(projectsTable.id, Number(params.id)))
+      .where(eq(projectsTable.id, Number(id)))
       .limit(1)
 
     if (!project[0] || project[0].creatorId !== uid)
-      return Response.json({ error: 'Forbidden' }, { status: 403 })
+      return res.status(403).json({ error: 'Forbidden' })
 
     await db
       .update(projectsTable)
       .set({ ...body, updatedAt: new Date() })
-      .where(eq(projectsTable.id, Number(params.id)))
+      .where(eq(projectsTable.id, Number(id)))
 
-    return Response.json({ success: true })
+    return res.json({ success: true })
   } catch (error) {
-    return Response.json({ error: 'Invalid request' }, { status: 400 })
+    if (error instanceof ZodError) {
+      return res.status(400).json(z.treeifyError(error))
+    }
+    console.log(error)
+    return res.status(400).json({ error: 'Invalid request' })
   }
 }
+
+export default withCors(handler)
