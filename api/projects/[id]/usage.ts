@@ -1,9 +1,9 @@
 import { VercelRequest, VercelResponse } from '@vercel/node'
 import { and, eq, sql } from 'drizzle-orm'
 import { getAuth } from 'firebase-admin/auth'
-import withCors from '../../lib/cors'
-import { db } from '../../lib/db'
-import { projectsTable, verificationsTable } from '../../lib/schema'
+import withCors from '../../lib/cors.js'
+import { db } from '../../lib/db.js'
+import { projectsTable, verificationsTable } from '../../lib/schema.js'
 
 async function handler(req: VercelRequest, res: VercelResponse) {
   const token = req.headers['authorization']?.split('Bearer ')[1]

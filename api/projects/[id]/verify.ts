@@ -1,7 +1,7 @@
 import { and, eq } from 'drizzle-orm'
 import { z } from 'zod'
-import { db } from '../../lib/db'
-import { projectsTable, verificationsTable } from '../../lib/schema'
+import { db } from '../../lib/db.js'
+import { projectsTable, verificationsTable } from '../../lib/schema.js'
 
 const verifySchema = z.object({
   client: z.string().min(1).max(100),

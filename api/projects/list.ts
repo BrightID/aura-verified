@@ -1,10 +1,10 @@
 import { VercelRequest, VercelResponse } from '@vercel/node'
 import { eq } from 'drizzle-orm'
 import { getAuth } from 'firebase-admin/auth'
-import withCors from '../lib/cors'
-import { db } from '../lib/db'
-import setupFirebaseApp from '../lib/firebase'
-import { projectsTable } from '../lib/schema'
+import withCors from '../lib/cors.js'
+import { db } from '../lib/db.js'
+import setupFirebaseApp from '../lib/firebase.js'
+import { projectsTable } from '../lib/schema.js'
 
 setupFirebaseApp()
 
