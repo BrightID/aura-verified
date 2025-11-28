@@ -1,4 +1,4 @@
-import { and, eq, gt } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
 import { z } from 'zod'
 import { db } from '../../lib/db'
 import { projectsTable, verificationsTable } from '../../lib/schema'
@@ -25,7 +25,7 @@ export async function POST(req: Request, { params }: { params: { id: string } })
       .where(
         and(
           eq(projectsTable.id, projectId),
-          gt(projectsTable.remainingtokens, -1000),
+          // gt(projectsTable.remainingtokens, -1000),
           eq(projectsTable.isActive, true)
           // TODO: add deadline filtering aswell
         )
