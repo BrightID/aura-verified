@@ -1,17 +1,13 @@
 import { VercelRequest, VercelResponse } from '@vercel/node'
 import { and, eq } from 'drizzle-orm'
-import { initializeApp } from 'firebase-admin/app'
 import { getAuth } from 'firebase-admin/auth'
 import { z } from 'zod'
 import withCors from '../lib/cors'
 import { db } from '../lib/db'
+import setupFirebaseApp from '../lib/firebase'
 import { projectsTable, upgradeRequest, verificationPlansTable } from '../lib/schema'
 
-try {
-  initializeApp()
-} catch (err) {
-  console.log(err)
-}
+setupFirebaseApp()
 
 const upgradeSchema = z.object({
   planId: z.number().int(),

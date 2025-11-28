@@ -1,12 +1,12 @@
 import { VercelRequest, VercelResponse } from '@vercel/node'
-import { initializeApp } from 'firebase-admin/app'
 import { getAuth } from 'firebase-admin/auth'
 import z, { ZodError } from 'zod'
 import withCors from '../lib/cors'
 import { db } from '../lib/db'
+import setupFirebaseApp from '../lib/firebase'
 import { projectsTable } from '../lib/schema'
 
-initializeApp()
+setupFirebaseApp()
 
 const createProjectSchema = z.object({
   name: z.string().min(1).max(255),
