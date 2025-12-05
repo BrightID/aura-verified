@@ -4,7 +4,7 @@ import { getAuth } from 'firebase-admin/auth'
 import withCors from '../lib/cors.js'
 import { db } from '../lib/db.js'
 import setupFirebaseApp from '../lib/firebase.js'
-import { projectsTable } from '../lib/schema.js'
+import { brightIdAppsTable, projectsTable } from '../lib/schema.js'
 
 setupFirebaseApp()
 
@@ -29,10 +29,30 @@ async function handler(req: VercelRequest, res: VercelResponse) {
         remainingtokens: projectsTable.remainingtokens,
         selectedPlanId: projectsTable.selectedPlanId,
         deadline: projectsTable.deadline,
-        createdAt: projectsTable.createdAt
+        createdAt: projectsTable.createdAt,
+        brightIdApp: {
+          key: brightIdAppsTable.key,
+          name: brightIdAppsTable.name,
+          sponsoring: brightIdAppsTable.sponsoring,
+          testing: brightIdAppsTable.testing,
+          idsAsHex: brightIdAppsTable.idsAsHex,
+          soulbound: brightIdAppsTable.soulbound,
+          soulboundMessage: brightIdAppsTable.soulboundMessage,
+          usingBlindSig: brightIdAppsTable.usingBlindSig,
+          verifications: brightIdAppsTable.verifications,
+          verificationExpiration: brightIdAppsTable.verificationExpirationLength,
+          nodeUrl: brightIdAppsTable.nodeUrl,
+          context: brightIdAppsTable.context,
+          description: brightIdAppsTable.description,
+          links: brightIdAppsTable.links,
+          images: brightIdAppsTable.images,
+          callbackUrl: brightIdAppsTable.callbackUrl,
+          joined: brightIdAppsTable.joined
+        }
       })
       .from(projectsTable)
       .where(eq(projectsTable.creatorId, uid))
+      .leftJoin(brightIdAppsTable, eq(projectsTable.brightIdAppId, brightIdAppsTable.key))
       .orderBy(projectsTable.createdAt)
 
     return res.send({ projects })
