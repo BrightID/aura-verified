@@ -53,7 +53,7 @@
     "openapi-typescript": "^7.8.0",
     "rimraf": "^6.0.1",
     "tsup": "^8.5.0",
-    "typescript": "^5.8.3",
+    "typescript": "^5.9.3",
     "vite": "^6.3.5",
     "@neondatabase/serverless": "^1.0.1",
     "@vercel/node": "^5.3.0",

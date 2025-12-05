@@ -50,14 +50,14 @@
         "openapi-typescript": "^7.8.0",
         "rimraf": "^6.0.1",
         "tsup": "^8.5.0",
-        "typescript": "^5.8.3",
+        "typescript": "^5.9.3",
         "vite": "^6.3.5",
         "vite-tsconfig-paths": "^5.1.4",
       },
     },
     "packages/aura-get-verified": {
       "name": "aura-get-verified",
-      "version": "0.0.11",
+      "version": "0.0.13",
       "dependencies": {
         "@lit-app/state": "^1.0.0",
         "@lit-labs/router": "^0.1.4",
@@ -1570,7 +1570,7 @@
 
     "types-ramda": ["types-ramda@0.31.0", "", { "dependencies": { "ts-toolbelt": "^9.6.0" } }, "sha512-vaoC35CRC3xvL8Z6HkshDbi6KWM1ezK0LHN0YyxXWUn9HKzBNg/T3xSGlJZjCYspnOD3jE7bcizsp0bUXZDxnQ=="],
 
-    "typescript": ["typescript@5.8.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ=="],
+    "typescript": ["typescript@5.9.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="],
 
     "ufo": ["ufo@1.6.1", "", {}, "sha512-9a4/uxlTWJ4+a5i0ooc1rU7C7YOw3wT+UGqdeNNHWnOF9qcMBgLRS+4IYUqbczewFx4mLEig6gawh7X6mFlEkA=="],
 

@@ -49,30 +49,23 @@ async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(403).json({ error: 'Forbidden' })
     }
 
-    await db
-      .insert(brightIdAppsTable)
-      .values({
-        key: brightIdApp.key,
-        name: brightIdApp.name,
-        sponsoring: brightIdApp.sponsoring,
-        testing: brightIdApp.testing,
-        idsAsHex: brightIdApp.idsAsHex,
-        soulbound: brightIdApp.soulbound,
-        soulboundMessage: brightIdApp.soulboundMessage,
-        usingBlindSig: brightIdApp.usingBlindSig,
-        verifications: brightIdApp.verifications,
-        verificationExpirationLength: brightIdApp.verificationExpirationLength,
-        nodeUrl: brightIdApp.nodeUrl,
-        context: brightIdApp.context,
-        description: brightIdApp.description,
-        links: brightIdApp.links,
-        images: brightIdApp.images,
-        callbackUrl: brightIdApp.callbackUrl
-      })
-      .onConflictDoUpdate({
-        target: brightIdAppsTable.key,
-        set: brightIdApp
-      })
+    const appData = {
+      ...brightIdApp,
+      soulboundMessage: brightIdApp.soulboundMessage ?? null,
+      verifications: brightIdApp.verifications ?? null,
+      verificationExpirationLength: brightIdApp.verificationExpirationLength ?? null,
+      nodeUrl: brightIdApp.nodeUrl ?? null,
+      context: brightIdApp.context ?? null,
+      description: brightIdApp.description ?? null,
+      links: brightIdApp.links ?? null,
+      images: brightIdApp.images ?? null,
+      callbackUrl: brightIdApp.callbackUrl ?? null
+    }
+
+    await db.insert(brightIdAppsTable).values(appData).onConflictDoUpdate({
+      target: brightIdAppsTable.key,
+      set: brightIdApp
+    })
 
     await db
       .update(projectsTable)

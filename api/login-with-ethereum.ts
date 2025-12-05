@@ -61,6 +61,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return
   }
   res.json({
-    id: result[0].id
+    id: result[0]?.id
   })
 }
