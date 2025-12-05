@@ -78,7 +78,7 @@ async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json(z.treeifyError(error))
     }
     console.error(error)
-    return res.status(500).json({ error: 'Internal error' })
+    return res.status(500).json({ error: 'Internal error', debug: `${error}` })
   }
 }
 
