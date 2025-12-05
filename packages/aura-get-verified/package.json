@@ -10,9 +10,9 @@
   "homepage": "https://aura-get-verified.vercel.app/home",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Meta-Node/get-verified.git"
+    "url": "git+https://github.com/BrightID/aura-verified.git"
   },
-  "bugs": "https://github.com/vite-pwa/Meta-Node/get-verified/issues",
+  "bugs": "https://github.com/BrightID/aura-verified/issues",
   "keywords": [
     "brightid",
     "aura",

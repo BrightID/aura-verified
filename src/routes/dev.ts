@@ -165,7 +165,6 @@ export class EmbeddedVerificationPageElement extends SignalWatcher(LitElement) {
               height="550"
               src="/embed/projects/4"
             ></iframe>
-            <!-- src="/embed/projects/4" -->
           </div>
         </div>
       </div>
