@@ -33,7 +33,7 @@ export const projectsTable = pgTable('projects', {
   websiteUrl: varchar({ length: 1000 }),
   remainingtokens: integer().default(0),
   selectedPlanId: integer().references(() => verificationPlansTable.id),
-  brightIdAppId: varchar({ length: 500 }),
+  brightIdAppId: varchar({ length: 500 }).references(() => brightIdAppsTable.key),
   deadline: timestamp(),
 
   createdAt: timestamp().defaultNow(),

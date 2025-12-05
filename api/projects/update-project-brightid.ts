@@ -49,23 +49,48 @@ async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(403).json({ error: 'Forbidden' })
     }
 
-    const appData = {
-      ...brightIdApp,
-      soulboundMessage: brightIdApp.soulboundMessage ?? null,
-      verifications: brightIdApp.verifications ?? null,
-      verificationExpirationLength: brightIdApp.verificationExpirationLength ?? null,
-      nodeUrl: brightIdApp.nodeUrl ?? null,
-      context: brightIdApp.context ?? null,
-      description: brightIdApp.description ?? null,
-      links: brightIdApp.links ?? null,
-      images: brightIdApp.images ?? null,
-      callbackUrl: brightIdApp.callbackUrl ?? null
-    }
+    const updated = await db
+      .update(brightIdAppsTable)
+      .set({
+        name: brightIdApp.name,
+        sponsoring: brightIdApp.sponsoring,
+        testing: brightIdApp.testing,
+        idsAsHex: brightIdApp.idsAsHex,
+        soulbound: brightIdApp.soulbound,
+        soulboundMessage: brightIdApp.soulboundMessage ?? null,
+        usingBlindSig: brightIdApp.usingBlindSig,
+        verifications: brightIdApp.verifications ?? null,
+        verificationExpirationLength: brightIdApp.verificationExpirationLength ?? null,
+        nodeUrl: brightIdApp.nodeUrl ?? null,
+        context: brightIdApp.context ?? null,
+        description: brightIdApp.description ?? null,
+        links: brightIdApp.links ?? null,
+        images: brightIdApp.images ?? null,
+        callbackUrl: brightIdApp.callbackUrl ?? null
+      })
+      .where(eq(brightIdAppsTable.key, brightIdApp.key))
+      .returning()
 
-    await db.insert(brightIdAppsTable).values(appData).onConflictDoUpdate({
-      target: brightIdAppsTable.key,
-      set: brightIdApp
-    })
+    if (updated.length === 0) {
+      await db.insert(brightIdAppsTable).values({
+        key: brightIdApp.key,
+        name: brightIdApp.name,
+        sponsoring: brightIdApp.sponsoring,
+        testing: brightIdApp.testing,
+        idsAsHex: brightIdApp.idsAsHex,
+        soulbound: brightIdApp.soulbound,
+        soulboundMessage: brightIdApp.soulboundMessage ?? null,
+        usingBlindSig: brightIdApp.usingBlindSig,
+        verifications: brightIdApp.verifications ?? null,
+        verificationExpirationLength: brightIdApp.verificationExpirationLength ?? null,
+        nodeUrl: brightIdApp.nodeUrl ?? null,
+        context: brightIdApp.context ?? null,
+        description: brightIdApp.description ?? null,
+        links: brightIdApp.links ?? null,
+        images: brightIdApp.images ?? null,
+        callbackUrl: brightIdApp.callbackUrl ?? null
+      })
+    }
 
     await db
       .update(projectsTable)
