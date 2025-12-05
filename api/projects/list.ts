@@ -30,6 +30,7 @@ async function handler(req: VercelRequest, res: VercelResponse) {
         selectedPlanId: projectsTable.selectedPlanId,
         deadline: projectsTable.deadline,
         createdAt: projectsTable.createdAt,
+        brightIdAppId: projectsTable.brightIdAppId,
         brightIdApp: {
           key: brightIdAppsTable.key,
           name: brightIdAppsTable.name,
