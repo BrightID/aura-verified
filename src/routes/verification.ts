@@ -1,5 +1,3 @@
-import checkboxIcon from '@/assets/icons/checkbox-green.svg'
-import levelImage from '@/assets/images/level.png'
 import { projects } from '@/states/projects'
 import { levelUpProgress } from '@/states/user'
 import type { Project } from '@/types/projects'
@@ -11,266 +9,209 @@ import { css, html, LitElement, type CSSResultGroup } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 
 const focusedProject = signal(null as Project | null)
-
 const isPassed = signal(false)
 
 @customElement('verification-page')
 export class VerificationPage extends SignalWatcher(LitElement) {
-  @property({
-    type: Number
-  })
+  @property({ type: Number })
   projectId!: number
 
   static styles?: CSSResultGroup = css`
-    .app-container {
-      text-align: left;
-      display: flex;
-      flex-direction: column;
+    :host {
+      display: block;
+      --background: #0d0d1b;
+      --surface: #161b22;
+      --border: #30363d;
+      --foreground: #f0f6fc;
+      --muted: #8b949e;
+      --accent: #1f6feb;
+      --success: #238636;
+      --warning: #9e6a03;
+    }
+
+    .container {
       min-height: 100vh;
       background-color: var(--background);
       color: var(--foreground);
-
-      --background: #0d0d1b;
-      --foreground: #ffffff;
-      --muted: #8c8c8c;
-      --accent: #144bb9;
-      --highlight: #15c8ec;
-      --border: #1b2128;
-    }
-
-    .status-bar {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+        sans-serif;
+      padding: 32px 24px;
+      box-sizing: border-box;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px;
+      flex-direction: column;
+      max-width: 600px;
+      margin: 0 auto;
     }
 
-    .time {
-      font-size: 14px;
-      font-weight: 500;
+    /* Header Section */
+    .header {
+      margin-bottom: 40px;
+      text-align: left;
     }
 
-    .status-icons {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .status-icon {
-      height: 12px;
-      width: 16px;
-    }
-
-    .battery-icon {
-      height: 16px;
-      width: 24px;
-      display: flex;
-      align-items: center;
-    }
-
-    .battery-outline {
-      height: 12px;
-      width: 12px;
-      border: 2px solid white;
-      border-radius: 2px;
-    }
-
-    .battery-tip {
-      height: 4px;
-      width: 4px;
-      background-color: white;
-      border-radius: 50%;
-      margin-left: 2px;
-    }
-
-    .main-content {
-      flex: 1;
-      padding: 0 24px;
-      padding-bottom: 80px;
-    }
-
-    .title {
-      font-size: 30px;
+    .project-name {
+      font-size: 32px;
       font-weight: 700;
-      margin-top: 8px;
-      margin-bottom: 24px;
+      margin: 0 0 8px 0;
+      line-height: 1.2;
     }
 
-    .image-container {
-      position: relative;
-      width: 100%;
-      height: 208px;
-      margin-bottom: 16px;
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .image {
-      object-fit: contain;
-      height: 208px;
-      width: 368px;
-    }
-
-    .level-requirement {
-      text-align: center;
-      margin-bottom: 32px;
-    }
-
-    .highlight-text {
-      color: var(--highlight);
-    }
-
-    .steps-heading {
-      color: #e4dad7;
-      text-align: center;
-      margin-top: 35px;
-
-      font-size: 28px;
-      font-style: normal;
-      font-weight: 600;
-      line-height: normal;
-      letter-spacing: -0.7px;
-    }
-
-    .timeline {
-      position: relative;
-    }
-
-    .timeline-line {
-      position: absolute;
-      left: 19.5px;
-      top: 24px;
-      width: 10px;
-      height: calc(100% - 60px);
-      background: rgba(224, 191, 184, 0.12);
-      z-index: 0;
-    }
-
-    .step {
+    .project-meta {
+      font-size: 16px;
+      color: var(--muted);
       display: flex;
-      margin-bottom: 48px;
-      position: relative;
-      z-index: 10;
+      align-items: center;
+      gap: 8px;
     }
 
-    .step:last-child {
-      margin-bottom: 0;
+    .level-badge {
+      background: var(--border);
+      color: var(--foreground);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
     }
 
-    .step-icon {
-      flex-shrink: 0;
-      width: 48px;
-      height: 48px;
-      background-color: var(--accent);
+    /* List Section */
+    .requirements-title {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .requirements-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .req-card {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      font-size: small;
+      transition: border-color 0.2s;
+    }
+
+    .req-card.passed {
+      border-color: rgba(35, 134, 54, 0.4);
+    }
+
+    .status-indicator {
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 2px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    .step-content {
-      margin-left: 16px;
+    .status-indicator.passed {
+      background-color: var(--success);
+      box-shadow: 0 0 8px rgba(35, 134, 54, 0.4);
     }
 
-    .step-title {
-      color: #e4dad7;
-
-      text-overflow: ellipsis;
-      font-size: 17px;
-      font-style: normal;
-      font-weight: 600;
-      line-height: normal;
-      letter-spacing: -0.425px;
+    /* Checkmark shape */
+    .status-indicator.passed::after {
+      content: '';
+      width: 5px;
+      height: 9px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg) translate(-1px, -1px);
     }
 
-    .step-description {
-      margin-top: 4px;
-      color: var(--muted);
+    .status-indicator.pending {
+      border: 2px solid var(--muted);
+      background-color: transparent;
     }
 
-    .step-list {
-      margin-top: 8px;
-      color: #dadada;
-      list-style-type: none;
-      padding-left: 0;
+    .req-content {
+      flex: 1;
+      text-align: left;
     }
 
-    .step-list-item {
-      display: flex;
-      align-items: flex-start;
-      color: rgba(235, 213, 209, 0.62);
-
-      font-size: 15px;
-      font-style: normal;
+    .req-reason {
+      font-size: 14px;
       font-weight: 400;
-      line-height: 135%;
-      letter-spacing: -0.075px;
+      margin: 0 0 4px 0;
+      color: var(--foreground);
     }
 
-    .step-list-bullet {
-      margin-right: 8px;
-    }
-
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background-color: var(--background);
-      border-top: 1px solid var(--border);
-      padding: 16px 24px;
-    }
-
-    .nav-buttons {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .nav-button {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background: none;
-      border: none;
-      cursor: pointer;
+    .req-status-text {
+      font-size: 13px;
       color: var(--muted);
+    }
+
+    /* Success State */
+    .success-container {
+      text-align: center;
+      padding: 40px;
+      background: var(--surface);
+      border-radius: 12px;
+      border: 1px solid var(--success);
+    }
+
+    .success-title {
+      color: #7ee787;
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    /* Navigation */
+    .actions {
+      margin-top: 40px;
+      display: flex;
+      justify-content: center;
     }
 
     .back-btn {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 10px 24px;
-      background: var(--accent, #144bb9);
-      color: #fff;
-      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 24px;
+      background-color: var(--accent);
+      color: white;
+      border-radius: 6px;
       text-decoration: none;
-      font-size: 16px;
-      font-weight: 500;
-      box-shadow: 0 2px 8px rgba(20, 75, 185, 0.08);
-      transition: background 0.2s;
+      font-weight: 600;
+      font-size: 15px;
+      transition: background-color 0.2s;
+      width: 100%;
     }
 
     .back-btn:hover {
-      background-color: #0d3466;
+      background-color: #1158c7;
     }
 
-    .nav-button.active {
-      color: var(--foreground);
+    .loading {
+      color: var(--muted);
+      text-align: center;
+      margin-top: 40px;
     }
   `
 
   connectedCallback(): void {
     super.connectedCallback()
 
-    const fetchData = queryClient
+    queryClient
       .ensureQueryData({
         queryKey: ['projects'],
         queryFn: getProjects
       })
       .then((res) => {
         projects.set(res)
-
         focusedProject.set(res.find((item) => item.id === this.projectId) ?? null)
       })
 
@@ -281,72 +222,79 @@ export class VerificationPage extends SignalWatcher(LitElement) {
   }
 
   protected render() {
-    return html` <div class="app-container">
-      <div class="main-content">
-        <h1 class="title">${focusedProject.get()?.name}</h1>
+    const project = focusedProject.get()
+    const requirements = levelUpProgress.get()
 
-        <div class="image-container">
-          <img
-            src=${focusedProject.get()?.image ?? '/images/project-image.png?height=208&width=368'}
-            alt="Business people in conversation"
-            class="image"
-          />
+    // Logic from original: if no items are below the required level, user is verified
+    const isVerified =
+      project && requirements.filter((item) => item.level <= project.requirementLevel).length === 0
+    const activeRequirements = project
+      ? requirements.filter((item) => item.level >= project.requirementLevel)
+      : []
+
+    if (!project) {
+      return html`<div class="container">
+        <div class="loading">Loading project details...</div>
+      </div>`
+    }
+
+    return html`
+      <div class="container">
+        <div class="header">
+          <h1 class="project-name">${project.name}</h1>
+          <div class="project-meta">
+            <span>Required Verification:</span>
+            <span class="level-badge">Level ${project.requirementLevel}</span>
+          </div>
         </div>
 
-        <div class="level-requirement">
-          <span class="highlight-text">Requires Level: </span>
-          <span>${focusedProject.get()?.requirementLevel}</span>
-        </div>
-
-        ${!focusedProject.get()
-          ? 'Loading ....'
-          : levelUpProgress
-              .get()
-              .filter((item) => item.level <= focusedProject.get()!.requirementLevel).length === 0
-          ? html`<div
-              style="text-align:center;margin:32px 0;color:lightgreen;font-size:20px;font-weight:600;"
-            >
-              🎉 You are already verified!<br />
-              <span style="color:#dadada;font-size:16px;font-weight:400;"
-                >You can continue your progress in the app.</span
-              >
-              <br />
-              <a href="/home" class="back-btn">Back to Main App</a>
-            </div>`
+        ${isVerified
+          ? html`
+              <div class="success-container">
+                <div class="success-title">Verification Complete</div>
+                <p style="color: var(--muted); line-height: 1.5;">
+                  You have met all the necessary requirements to access
+                  <strong>${project.name}</strong>.
+                </p>
+                <div class="actions">
+                  <a href="/home" class="back-btn">Continue to App</a>
+                </div>
+              </div>
+            `
           : html`
-              <div class="timeline">
-                <div class="timeline-line"></div>
+              <div>
+                <div class="requirements-title">Pending Actions</div>
 
-                ${levelUpProgress
-                  .get()
-                  .filter((item) => item.level >= focusedProject.get()!.requirementLevel)
-                  .map(
-                    (req, idx) => html`
-                      <div class="step">
-                        <div class="step-icon">
-                          <img
-                            class=""
-                            width="40px"
-                            height="40px"
-                            alt="${req.status === 'passed' ? 'checkbox' : 'levelup'}"
-                            src="${req.status === 'passed' ? checkboxIcon : levelImage}"
-                          />
-                        </div>
-                        <div class="step-content">
-                          <h5 class="step-title">${req.reason}</h5>
-                          <p class="step-description">
-                            Status:
-                            <span style="color:${req.status === 'passed' ? 'lightgreen' : 'orange'}"
-                              >${req.status}</span
-                            >
-                          </p>
+                <div class="requirements-list">
+                  ${activeRequirements.map((req) => {
+                    const passed = req.status === 'passed'
+                    return html`
+                      <div class="req-card ${passed ? 'passed' : ''}">
+                        <div class="status-indicator ${passed ? 'passed' : 'pending'}"></div>
+
+                        <div class="req-content">
+                          <h3 class="req-reason">${req.reason}</h3>
+                          <div class="req-status-text">
+                            ${passed ? 'Requirement Met' : 'Action Required'}
+                          </div>
                         </div>
                       </div>
                     `
-                  )}
+                  })}
+                </div>
+
+                <div class="actions">
+                  <a
+                    href="/home"
+                    class="back-btn"
+                    style="background-color: var(--surface); border: 1px solid var(--border);"
+                  >
+                    Back to Overview
+                  </a>
+                </div>
               </div>
             `}
       </div>
-    </div>`
+    `
   }
 }

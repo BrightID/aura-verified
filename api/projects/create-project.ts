@@ -34,7 +34,8 @@ async function handler(req: VercelRequest, res: VercelResponse) {
     await db.insert(projectsTable).values({
       ...body,
       creatorId: uid,
-      remainingtokens: 1000
+      remainingtokens: 1000,
+      requirementLevel: 1
     })
 
     res.status(201).json({ success: true })
