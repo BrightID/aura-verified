@@ -7,6 +7,12 @@ export class InputElement extends LitElement {
   type: string = 'text'
 
   @property()
+  label?: string
+
+  @property()
+  name: string = 'input-text'
+
+  @property()
   placeholder = ''
 
   @property({ type: Boolean })
@@ -21,6 +27,7 @@ export class InputElement extends LitElement {
       width: 100%;
       height: 2.5rem;
       padding: 0 0.75rem;
+      box-sizing: border-box;
       border-radius: var(--radius);
       font-size: 0.875rem;
 
@@ -43,10 +50,10 @@ export class InputElement extends LitElement {
     input::placeholder {
       color: var(--muted-foreground);
     }
-
-    input:hover:not(:disabled) {
-      border-color: color-mix(in oklch, var(--border) 90%, transparent);
-    }
+    //
+    // input:hover:not(:disabled) {
+    //   border-color: color-mix(in oklch, var(--border) 90%, transparent);
+    // }
 
     input:focus-visible {
       border-color: var(--ring);
@@ -57,11 +64,22 @@ export class InputElement extends LitElement {
       opacity: 0.5;
       cursor: not-allowed;
     }
+
+    label {
+      font-size: var(--sm);
+      font-weight: 500;
+    }
   `
 
   render() {
     return html`
-      <input .type=${this.type} .placeholder=${this.placeholder} ?disabled=${this.disabled} />
+      ${this.label ? html` <label> ${this.label} </label> ` : ''}
+      <input
+        .type=${this.type}
+        .placeholder=${this.placeholder}
+        ?disabled=${this.disabled}
+        .name=${this.name}
+      />
     `
   }
 }
