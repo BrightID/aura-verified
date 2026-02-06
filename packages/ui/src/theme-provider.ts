@@ -1,4 +1,4 @@
-import { LitElement, type CSSResultGroup, css, html } from 'lit'
+import { css, html, LitElement, type CSSResultGroup } from 'lit'
 import { customElement } from 'lit/decorators.js'
 
 @customElement('a-theme-provider')
@@ -11,6 +11,7 @@ export class ThemeProvider extends LitElement {
       --md: 1rem;
       --lg: 1.25rem;
       --xl: 1.5rem;
+      --xl2: 2rem;
       --background: oklch(0.13 0.01 260);
       --foreground: oklch(0.98 0 0);
       --card: oklch(0.18 0.015 260);

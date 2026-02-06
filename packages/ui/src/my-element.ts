@@ -1,10 +1,11 @@
 import { LitElement, css, html } from 'lit'
 import { customElement } from 'lit/decorators.js'
-import './index'
 import './composables/card-section'
 import './composables/dialog-section'
 import './composables/grids-section'
+import './composables/popovers-section'
 import './composables/tabs-section'
+import './index'
 import './theme-provider'
 
 @customElement('my-element')
@@ -16,19 +17,24 @@ export class MyElement extends LitElement {
 
         <a-separator></a-separator>
 
-        <cards-section></cards-section>
-        <dialog-section></dialog-section>
+        <a-flex gap="4">
+          <div>
+            <cards-section></cards-section>
+            <dialog-section></dialog-section>
 
-        <a-separator></a-separator>
-        <tabs-section></tabs-section>
-        <grids-section></grids-section>
+            <a-separator></a-separator>
+            <tabs-section></tabs-section>
+          </div>
+          <div>
+            <grids-section></grids-section>
+            <popovers-section></popovers-section>
+          </div>
+        </a-flex>
       </a-container>
     `
   }
 
-  static styles = css`
-
-  `
+  static styles = css``
 }
 
 declare global {
